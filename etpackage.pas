@@ -7,15 +7,8 @@ unit etpackage;
 interface
 
 uses
-  EpikTimer, LazarusPackageIntf; 
+  EpikTimer; 
 
 implementation
 
-procedure Register; 
-begin
-  RegisterUnit('EpikTimer', @EpikTimer.Register); 
-end; 
-
-initialization
-  RegisterPackage('etpackage', @Register); 
 end.

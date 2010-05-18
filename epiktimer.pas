@@ -70,12 +70,9 @@ uses
 {$IFDEF Windows}
   Windows, MMSystem,
 {$ELSE}
-  baseunix, unix, unixutil,
+  unix, unixutil,
 {$ENDIF}
-{$IFDEF FPC}
-  LResources,
-{$ENDIF}
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, dateutils;
+  Classes, SysUtils, dateutils;
 
 Const
   DefaultSystemTicksPerSecond = 1000000; //Divisor for microsecond resolution
@@ -279,7 +276,6 @@ type
       property CorrelationMode:CorrelationModes read FCorrelationMode write FCorrelationMode;
   end;
 
-procedure Register;
 
 implementation
 
@@ -784,19 +780,6 @@ begin
   inherited Destroy;
   // here in case we need to clean something up in a later version
 end;
-
-(* * * * * * * * * * * Register Component  * * * * * * * * * * * *)
-
-procedure Register;
-begin
-  RegisterComponents('System', [TEpikTimer]);
-end;
-
-Initialization
-
-{$IFDEF FPC}
-  {$I epiktimer.lrs}
-{$ENDIF}
 
 end.
 

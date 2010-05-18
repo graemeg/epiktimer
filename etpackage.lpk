@@ -1,47 +1,34 @@
 <?xml version="1.0"?>
 <CONFIG>
-  <Package Version="2">
+  <Package Version="3">
     <Name Value="etpackage"/>
     <Author Value="Tom Lisjac <netdxr@gmail.com>"/>
     <CompilerOptions>
-      <Version Value="5"/>
+      <Version Value="8"/>
       <SearchPaths>
-        <OtherUnitFiles Value="$(LazarusDir)/lcl/units/"/>
-        <UnitOutputDirectory Value="lib"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/"/>
       </SearchPaths>
-      <CodeGeneration>
-        <Generate Value="Faster"/>
-      </CodeGeneration>
       <Other>
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
     <Description Value="EpikTimer elapsed time component
-  http://wiki.lazarus.freepascal.org/EpikTimer
+http://wiki.lazarus.freepascal.org/EpikTimer
 "/>
-    <License Value="Modifyed LGPL
+    <License Value="Modified LGPL
 "/>
-    <Version Major="1"/>
-    <Files Count="2">
+    <Version Major="1" Build="1"/>
+    <Files Count="1">
       <Item1>
-        <Filename Value="epiktimer.lrs"/>
-        <Type Value="LRS"/>
-      </Item1>
-      <Item2>
         <Filename Value="epiktimer.pas"/>
-        <HasRegisterProc Value="True"/>
         <UnitName Value="EpikTimer"/>
-      </Item2>
-    </Files>
-    <Type Value="RunAndDesignTime"/>
-    <RequiredPkgs Count="2">
-      <Item1>
-        <PackageName Value="LCL"/>
       </Item1>
-      <Item2>
+    </Files>
+    <RequiredPkgs Count="1">
+      <Item1>
         <PackageName Value="FCL"/>
         <MinVersion Major="1" Valid="True"/>
-      </Item2>
+      </Item1>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)/"/>
