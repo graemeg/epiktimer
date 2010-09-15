@@ -70,7 +70,7 @@ uses
 {$IFDEF Windows}
   Windows, MMSystem,
 {$ELSE}
-  unix, unixutil,
+  unix, unixutil, BaseUnix,
 {$ENDIF}
   Classes, SysUtils, dateutils;
 
