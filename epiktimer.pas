@@ -308,6 +308,12 @@ implementation
   absolute accuracy isn't important.
 }
 
+const
+  NanoPerSec = 1000000000;
+  NanoPerMilli = 1000000;
+  MilliPerSec = 1000;
+
+
 (* * * * * * * * Start of i386 Hardware specific code  * * * * * * *)
 
 {$IFDEF CPUI386}
@@ -559,7 +565,8 @@ begin
   // I opted for this approach which also provides microsecond precision.
   fpgettimeofday(@t,nil);
   EpochToLocal(t.tv_sec, Y, M, D, hour, min, sec);
-  ms:=t.tv_usec div 1000; us:=t.tv_usec mod 1000;
+  ms:=t.tv_usec div MilliPerSec;
+  us:=t.tv_usec mod MilliPerSec;
 {$ENDIF}
   Result:='';
   If FWantDays then
@@ -641,7 +648,7 @@ begin
     ElapsedTicks:=Total div FreqIterations;
     SampleTime:=FrequencyGateTimeMS;
 
-    TicksFrequency:=Trunc( ElapsedTicks / (SampleTime / 1000));
+    TicksFrequency:=Trunc( ElapsedTicks / (SampleTime / MilliPerSec));
 
     FreqCalibrated:=True;
   end;
