@@ -399,37 +399,10 @@ begin
 end;
 
 function TEpikTimer.SystemSleep(Milliseconds: Integer):Integer;
-{$IFDEF Windows}
-
 begin
   Sleep(Milliseconds);
   Result := 0;
 end;
-
-{$ELSE}
-
-  {$IFDEF CPUX86_64}
-
-begin
-  Sleep(Milliseconds);
-  Result := 0;
-end;
-
-  {$ELSE}
-
-var
-  timerequested, timeremaining: timespec;
-begin
-  // This is not a very accurate or stable gating source... but it's the
-  // only one that's available for making short term measurements.
-  timerequested.tv_sec:=Milliseconds div 1000;
-  timerequested.tv_nsec:=(Milliseconds mod 1000) * 1000000;
-  Result := fpnanosleep(@timerequested, @timeremaining) // returns 0 if ok
-end;
-
-  {$ENDIF}
-
-{$ENDIF}
 
 function TEpikTimer.GetHardwareTicks: TickType;
 begin
