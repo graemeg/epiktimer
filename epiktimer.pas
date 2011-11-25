@@ -70,7 +70,7 @@ uses
 {$IFDEF Windows}
   Windows, MMSystem,
 {$ELSE}
-  unix, unixutil, BaseUnix,
+  unix, unixutil, syscall,
 {$ENDIF}
   Classes, SysUtils, dateutils;
 
@@ -388,13 +388,33 @@ function SystemTicks: TickType;
 {$IFDEF Windows}
 begin
   QueryPerformanceCounter(Result);
-  //Result := Int64(TimeStampToMSecs(DateTimeToTimeStamp(Now)) * 1000) // an alternative Win32 timebase
 {$ELSE}
-var t : timeval;
+
+const
+  CLOCK_MONOTONIC = 1;
+
+        { Experimental, no idea if this works or is implemented correctly }
+        function newGetTickCount: Cardinal;
+        var
+          ts: TTimeSpec;
+          i: TickType;
+          t: timeval;
+        begin
+          // use the Posix clock_gettime() call
+          if do_syscall(syscall_nr_clock_gettime,TSysParam(CLOCK_MONOTONIC),TSysParam(@ts)) <> 0 then //kernels 2.4.* does not support
+          begin
+            // Use the FPC fallback
+            fpgettimeofday(@t,nil);
+            // Build a 64 bit microsecond tick from the seconds and microsecond longints
+            Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
+            Exit;
+          end;
+          i := ts.tv_sec;
+          i := (i*MilliPerSec) + ts.tv_nsec div NanoPerMilli;
+          Result := i;
+        end;
 begin
-  fpgettimeofday(@t,nil);
-   // Build a 64 bit microsecond tick from the seconds and microsecond longints
-  Result := (TickType(t.tv_sec) * 1000000) + t.tv_usec;
+  Result := newGetTickCount;
 {$ENDIF}
 end;
 
