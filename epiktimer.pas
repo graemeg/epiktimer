@@ -70,7 +70,7 @@ uses
 {$IFDEF Windows}
   Windows, MMSystem,
 {$ELSE}
-  unix, unixutil, syscall,
+  unix, unixutil, baseunix,
 {$ENDIF}
   Classes, SysUtils, dateutils;
 
@@ -401,7 +401,7 @@ const
           t: timeval;
         begin
           // use the Posix clock_gettime() call
-          if do_syscall(syscall_nr_clock_gettime,TSysParam(CLOCK_MONOTONIC),TSysParam(@ts)) <> 0 then //kernels 2.4.* does not support
+          if clock_gettime(CLOCK_MONOTONIC, @ts)=0 then
           begin
             // Use the FPC fallback
             fpgettimeofday(@t,nil);
