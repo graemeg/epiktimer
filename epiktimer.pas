@@ -21,12 +21,12 @@ unit EpikTimer;
            the Pentium's RDTSC instruction in wmFastTime and QwmFastTime.
 }
 
-{ Copyright (C) 2003-2006 by Tom Lisjac <netdxr@gmail.com>,
+{ Copyright (C) 2003-2014 by Tom Lisjac <netdxr@gmail.com>,
    Felipe Monteiro de Carvalho and Marcel Minderhoud
 
-  This library is licensed on the same Modifyed LGPL as Free Pascal RTL and LCL are
+  This library is licensed on the same Modified LGPL as Free Pascal RTL and LCL are
 
-  Please contact the author if you'd like to use this component but the Modifyed LGPL
+  Please contact the author if you'd like to use this component but the Modified LGPL
   doesn't work with your project licensing.
 
   This program is distributed in the hope that it will be useful, but WITHOUT
@@ -36,8 +36,8 @@ unit EpikTimer;
   Contributor(s):
   
   * Felipe Monteiro de Carvalho (felipemonteiro.carvalho@gmail.com)
-  
   * Marcel Minderhoud
+  * Graeme Geldenhuys <graemeg@gmail.com>
   
 }
 {
