@@ -43,7 +43,6 @@ unit EpikTimer;
 {
  Known Issues
 
-   - Tested on Linux but no other Lazarus/FPC supported Unix platforms
    - If system doesn't have microsecond system clock resolution, the component
      falls back to a single gated measurement of the hardware tick frequency via
      nanosleep. This usually results in poor absolute accuracy due large amounts
@@ -385,37 +384,46 @@ function NullHardwareTicks:TickType; begin Result:=0 end;
 // Return microsecond normalized time source for a given platform.
 // This should be sync'able to an external time standard (via NTP, for example).
 function SystemTicks: TickType;
-{$IFDEF Windows}
+{$IFDEF WINDOWS}
 begin
   QueryPerformanceCounter(Result);
 {$ELSE}
+  {$IFDEF LINUX}
+  const
+    CLOCK_MONOTONIC = 1;
 
-const
-  CLOCK_MONOTONIC = 1;
-
-        { Experimental, no idea if this works or is implemented correctly }
-        function newGetTickCount: Cardinal;
-        var
-          ts: TTimeSpec;
-          i: TickType;
-          t: timeval;
-        begin
-          // use the Posix clock_gettime() call
-          if clock_gettime(CLOCK_MONOTONIC, @ts)=0 then
+          { Experimental, no idea if this works or is implemented correctly }
+          function newGetTickCount: Cardinal;
+          var
+            ts: TTimeSpec;
+            i: TickType;
+            t: timeval;
           begin
-            // Use the FPC fallback
-            fpgettimeofday(@t,nil);
-            // Build a 64 bit microsecond tick from the seconds and microsecond longints
-            Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
-            Exit;
+            // use the Posix clock_gettime() call
+            if clock_gettime(CLOCK_MONOTONIC, @ts)=0 then
+            begin
+              // Use the FPC fallback
+              fpgettimeofday(@t,nil);
+              // Build a 64 bit microsecond tick from the seconds and microsecond longints
+              Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
+              Exit;
+            end;
+            i := ts.tv_sec;
+            i := (i*MilliPerSec) + ts.tv_nsec div NanoPerMilli;
+            Result := i;
           end;
-          i := ts.tv_sec;
-          i := (i*MilliPerSec) + ts.tv_nsec div NanoPerMilli;
-          Result := i;
-        end;
-begin
-  Result := newGetTickCount;
-{$ENDIF}
+  begin
+    Result := newGetTickCount;
+  {$ELSE}
+  var
+    t: timeval;
+  begin
+    // Use the FPC fallback
+    fpgettimeofday(@t,nil);
+    // Build a 64 bit microsecond tick from the seconds and microsecond longints
+    Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
+  {$ENDIF LINUX}
+{$ENDIF WINDOWS}
 end;
 
 function TEpikTimer.SystemSleep(Milliseconds: Integer):Integer;
