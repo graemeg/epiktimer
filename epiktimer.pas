@@ -21,12 +21,12 @@ unit EpikTimer;
            the Pentium's RDTSC instruction in wmFastTime and QwmFastTime.
 }
 
-{ Copyright (C) 2003-2006 by Tom Lisjac <netdxr@gmail.com>,
+{ Copyright (C) 2003-2014 by Tom Lisjac <netdxr@gmail.com>,
    Felipe Monteiro de Carvalho and Marcel Minderhoud
 
-  This library is licensed on the same Modifyed LGPL as Free Pascal RTL and LCL are
+  This library is licensed on the same Modified LGPL as Free Pascal RTL and LCL are
 
-  Please contact the author if you'd like to use this component but the Modifyed LGPL
+  Please contact the author if you'd like to use this component but the Modified LGPL
   doesn't work with your project licensing.
 
   This program is distributed in the hope that it will be useful, but WITHOUT
@@ -36,14 +36,13 @@ unit EpikTimer;
   Contributor(s):
   
   * Felipe Monteiro de Carvalho (felipemonteiro.carvalho@gmail.com)
-  
   * Marcel Minderhoud
+  * Graeme Geldenhuys <graemeg@gmail.com>
   
 }
 {
  Known Issues
 
-   - Tested on Linux but no other Lazarus/FPC supported Unix platforms
    - If system doesn't have microsecond system clock resolution, the component
      falls back to a single gated measurement of the hardware tick frequency via
      nanosleep. This usually results in poor absolute accuracy due large amounts
@@ -70,7 +69,7 @@ uses
 {$IFDEF Windows}
   Windows, MMSystem,
 {$ELSE}
-  unix, unixutil, BaseUnix,
+  unix, unixutil, baseunix,
 {$ENDIF}
   Classes, SysUtils, dateutils;
 
@@ -308,6 +307,12 @@ implementation
   absolute accuracy isn't important.
 }
 
+const
+  NanoPerSec = 1000000000;
+  NanoPerMilli = 1000000;
+  MilliPerSec = 1000;
+
+
 (* * * * * * * * Start of i386 Hardware specific code  * * * * * * *)
 
 {$IFDEF CPUI386}
@@ -379,51 +384,53 @@ function NullHardwareTicks:TickType; begin Result:=0 end;
 // Return microsecond normalized time source for a given platform.
 // This should be sync'able to an external time standard (via NTP, for example).
 function SystemTicks: TickType;
-{$IFDEF Windows}
+{$IFDEF WINDOWS}
 begin
   QueryPerformanceCounter(Result);
-  //Result := Int64(TimeStampToMSecs(DateTimeToTimeStamp(Now)) * 1000) // an alternative Win32 timebase
 {$ELSE}
-var t : timeval;
-begin
-  fpgettimeofday(@t,nil);
-   // Build a 64 bit microsecond tick from the seconds and microsecond longints
-  Result := (TickType(t.tv_sec) * 1000000) + t.tv_usec;
-{$ENDIF}
+  {$IFDEF LINUX}
+  const
+    CLOCK_MONOTONIC = 1;
+
+          { Experimental, no idea if this works or is implemented correctly }
+          function newGetTickCount: Cardinal;
+          var
+            ts: TTimeSpec;
+            i: TickType;
+            t: timeval;
+          begin
+            // use the Posix clock_gettime() call
+            if clock_gettime(CLOCK_MONOTONIC, @ts)=0 then
+            begin
+              // Use the FPC fallback
+              fpgettimeofday(@t,nil);
+              // Build a 64 bit microsecond tick from the seconds and microsecond longints
+              Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
+              Exit;
+            end;
+            i := ts.tv_sec;
+            i := (i*MilliPerSec) + ts.tv_nsec div NanoPerMilli;
+            Result := i;
+          end;
+  begin
+    Result := newGetTickCount;
+  {$ELSE}
+  var
+    t: timeval;
+  begin
+    // Use the FPC fallback
+    fpgettimeofday(@t,nil);
+    // Build a 64 bit microsecond tick from the seconds and microsecond longints
+    Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
+  {$ENDIF LINUX}
+{$ENDIF WINDOWS}
 end;
 
 function TEpikTimer.SystemSleep(Milliseconds: Integer):Integer;
-{$IFDEF Windows}
-
 begin
   Sleep(Milliseconds);
   Result := 0;
 end;
-
-{$ELSE}
-
-  {$IFDEF CPUX86_64}
-
-begin
-  Sleep(Milliseconds);
-  Result := 0;
-end;
-
-  {$ELSE}
-
-var
-  timerequested, timeremaining: timespec;
-begin
-  // This is not a very accurate or stable gating source... but it's the
-  // only one that's available for making short term measurements.
-  timerequested.tv_sec:=Milliseconds div 1000;
-  timerequested.tv_nsec:=(Milliseconds mod 1000) * 1000000;
-  Result := fpnanosleep(@timerequested, @timeremaining) // returns 0 if ok
-end;
-
-  {$ENDIF}
-
-{$ENDIF}
 
 function TEpikTimer.GetHardwareTicks: TickType;
 begin
@@ -559,7 +566,8 @@ begin
   // I opted for this approach which also provides microsecond precision.
   fpgettimeofday(@t,nil);
   EpochToLocal(t.tv_sec, Y, M, D, hour, min, sec);
-  ms:=t.tv_usec div 1000; us:=t.tv_usec mod 1000;
+  ms:=t.tv_usec div MilliPerSec;
+  us:=t.tv_usec mod MilliPerSec;
 {$ENDIF}
   Result:='';
   If FWantDays then
@@ -641,7 +649,7 @@ begin
     ElapsedTicks:=Total div FreqIterations;
     SampleTime:=FrequencyGateTimeMS;
 
-    TicksFrequency:=Trunc( ElapsedTicks / (SampleTime / 1000));
+    TicksFrequency:=Trunc( ElapsedTicks / (SampleTime / MilliPerSec));
 
     FreqCalibrated:=True;
   end;
@@ -767,11 +775,13 @@ constructor TEpikTimer.Create(AOwner: TComponent);
 
 begin
   inherited Create(AOwner);
-  StringPrecision:=6; FWantMS:=True; FWantDays:=True;
+  StringPrecision := 6;
+  FWantMS         := True;
+  FWantDays       := True;
   InitTimebases;
-  CorrelationMode:=OnTimebaseSelect;
+  CorrelationMode := OnTimebaseSelect;
   // Default is the safe, cross-platform but less precise system timebase
-  TimebaseSource:=SystemTimebase;
+  TimebaseSource  := SystemTimebase;
   Clear(BuiltInTimer)
 end;
 

@@ -1,0 +1,9 @@
+*.lps
+*.compiled
+*.[oa]
+*.ppu
+*.rst
+*.cgi
+*.exe
+*.log
+Bin/images/*.bmp
