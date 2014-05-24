@@ -220,14 +220,20 @@ begin
 end;
 
 procedure TForm1.Button8CLICK(Sender: TObject);
-Var CorrelatedTickFrequency:TickType;
+var
+  CorrelatedTickFrequency:TickType;
+  lTimeBaseData: TimeBaseData;
 begin
   CorrelatedTickFrequency:=ET.GetTimebaseCorrelation;
   Edit9.text:=format('%.0n',[extended(CorrelationJitter-CorrelatedTickFrequency)]);
   Edit7.text:=format('%.0n',[extended(CorrelatedTickFrequency)]);
   CorrelationJitter:= CorrelatedTickFrequency;
   If checkbox4.checked then
-    ET.HWTimebase.TicksFrequency:=trunc(CorrelatedTickFrequency);
+  begin
+    { Yes this code looks weird, but its now a requirement since FPC 2.6.2 }
+    lTimeBaseData := ET.HWTimebase;
+    lTimeBaseData.TicksFrequency := trunc(CorrelatedTickFrequency);
+  end;
 end;
 
 procedure TForm1.Checkbox2CLICK(Sender: TObject);
