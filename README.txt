@@ -2,11 +2,9 @@
 
   Description: Precision timer/stopwatch component for Lazarus/FPC
   Author: Tom Lisjac <netdxr@gmail.com>
-  Contributors:
-    * Felipe Monteiro de Carvalho <felipemonteiro.carvalho@gmail.com>
-    * Marcel Minderhoud
+  Contributors: Please see the Git repository commit history
   License: Modifyed LGPL (The same as Free Pascal RTL and LCL)
-  Copyright (C) 2003-2006 by Tom Lisjac, Felipe Monteiro de Carvalho and Marcel Minderhoud
+  Copyright (C) 2003-2006 by Tom Lisjac
   Latest version can be obtained at: http://wiki.lazarus.freepascal.org/EpikTimer
 
  Contents:

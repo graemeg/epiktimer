@@ -29,3 +29,4 @@
       Some changes in timeval
       Tested on AMD64 (linux)
 
+  All further changes can be found by querying the Git commit log
