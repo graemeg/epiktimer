@@ -5,7 +5,7 @@ unit splash;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ComCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls;
 
 type
@@ -26,8 +26,8 @@ var
 
 implementation
 
-initialization
-  {$I splash.lrs}
+
+{$R *.lfm}
 
 end.
 

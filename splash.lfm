@@ -1,59 +1,64 @@
 object Form3: TForm3
-  CAPTION = 'EpikTimer Demo Initialization - Please wait'
-  CLIENTHEIGHT = 167
-  CLIENTWIDTH = 400
-  POSITION = poscreencenter
-  VISIBLE = True
-  HORZSCROLLBAR.PAGE = 401
-  VERTSCROLLBAR.PAGE = 168
-  LEFT = 440
-  HEIGHT = 167
-  TOP = 428
-  WIDTH = 400
-  object Progressbar1: TPROGRESSBAR
-    MIN = 1
-    MAX = 9
-    STEP = 1
-    SMOOTH = True
-    DRAGCURSOR = 0
-    TABORDER = 0
-    TABSTOP = True
-    LEFT = 60
-    HEIGHT = 20
-    TOP = 105
-    WIDTH = 294
+  Left = 475
+  Height = 167
+  Top = 384
+  Width = 400
+  HorzScrollBar.Page = 401
+  VertScrollBar.Page = 168
+  Caption = 'EpikTimer Demo Initialization - Please wait'
+  ClientHeight = 167
+  ClientWidth = 400
+  Position = poScreenCenter
+  LCLVersion = '1.1'
+  Visible = True
+  object Progressbar1: TProgressBar
+    Left = 60
+    Height = 20
+    Top = 105
+    Width = 294
+    DragCursor = crDefault
+    Max = 9
+    Min = 1
+    Position = 1
+    Smooth = True
+    Step = 1
+    TabOrder = 0
+    TabStop = True
   end
-  object Label1: TLABEL
-    ALIGNMENT = tacenter
-    CAPTION = 'EpikTimer Test application'
-    LAYOUT = tltop
-    LEFT = 5
-    HEIGHT = 17
-    TOP = 25
-    WIDTH = 395
+  object Label1: TLabel
+    Left = 5
+    Height = 15
+    Top = 25
+    Width = 164
+    Alignment = taCenter
+    Caption = 'EpikTimer Test application'
+    ParentColor = False
   end
-  object Label2: TLABEL
-    ALIGNMENT = tacenter
-    CAPTION = 'Beta release: 7-3-2003'
-    LAYOUT = tltop
-    HEIGHT = 17
-    TOP = 65
-    WIDTH = 400
+  object Label2: TLabel
+    Left = 0
+    Height = 15
+    Top = 65
+    Width = 147
+    Alignment = taCenter
+    Caption = 'Beta release: 7-3-2003'
+    ParentColor = False
   end
-  object Label3: TLABEL
-    ALIGNMENT = tacenter
-    CAPTION = 'By Tom Lisjac <vlx@users.sourceforge.net>'
-    LAYOUT = tltop
-    HEIGHT = 17
-    TOP = 45
-    WIDTH = 400
+  object Label3: TLabel
+    Left = 0
+    Height = 15
+    Top = 45
+    Width = 281
+    Alignment = taCenter
+    Caption = 'By Tom Lisjac <vlx@users.sourceforge.net>'
+    ParentColor = False
   end
-  object Label4: TLABEL
-    ALIGNMENT = tacenter
-    CAPTION = 'System initializing... please wait'
-    LAYOUT = tltop
-    HEIGHT = 17
-    TOP = 135
-    WIDTH = 400
+  object Label4: TLabel
+    Left = 0
+    Height = 15
+    Top = 135
+    Width = 202
+    Alignment = taCenter
+    Caption = 'System initializing... please wait'
+    ParentColor = False
   end
 end

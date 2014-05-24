@@ -1,104 +1,19 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <PathDelim Value="/"/>
-    <Version Value="5"/>
+    <Version Value="9"/>
     <General>
+      <Flags>
+        <LRSInOutputDirectory Value="False"/>
+      </Flags>
+      <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
-      <IconPath Value="./"/>
-      <TargetFileExt Value=""/>
       <Title Value="etdemo"/>
-      <ActiveEditorIndexAtStart Value="0"/>
+      <ResourceType Value="res"/>
     </General>
-    <LazDoc Paths=""/>
-    <Units Count="9">
-      <Unit0>
-        <CursorPos X="10" Y="3"/>
-        <EditorIndex Value="0"/>
-        <Filename Value="etdemo.lpr"/>
-        <IsPartOfProject Value="True"/>
-        <Loaded Value="True"/>
-        <TopLine Value="1"/>
-        <UnitName Value="project1"/>
-        <UsageCount Value="25"/>
-      </Unit0>
-      <Unit1>
-        <CursorPos X="25" Y="182"/>
-        <EditorIndex Value="4"/>
-        <Filename Value="main.pas"/>
-        <ComponentName Value="Form1"/>
-        <IsPartOfProject Value="True"/>
-        <Loaded Value="True"/>
-        <ResourceFilename Value="main.lrs"/>
-        <TopLine Value="174"/>
-        <UnitName Value="main"/>
-        <UsageCount Value="20"/>
-      </Unit1>
-      <Unit2>
-        <CursorPos X="1" Y="563"/>
-        <EditorIndex Value="2"/>
-        <Filename Value="EpikTimer.pas"/>
-        <IsPartOfProject Value="True"/>
-        <Loaded Value="True"/>
-        <TopLine Value="550"/>
-        <UnitName Value="EpikTimer"/>
-        <UsageCount Value="20"/>
-      </Unit2>
-      <Unit3>
-        <CursorPos X="7" Y="6"/>
-        <EditorIndex Value="1"/>
-        <Filename Value="newsw.pas"/>
-        <ComponentName Value="Form2"/>
-        <IsPartOfProject Value="True"/>
-        <Loaded Value="True"/>
-        <ResourceFilename Value="newsw.lrs"/>
-        <TopLine Value="18"/>
-        <UnitName Value="newsw"/>
-        <UsageCount Value="20"/>
-      </Unit3>
-      <Unit4>
-        <CursorPos X="8" Y="7"/>
-        <EditorIndex Value="3"/>
-        <Filename Value="splash.pas"/>
-        <ComponentName Value="Form3"/>
-        <IsPartOfProject Value="True"/>
-        <Loaded Value="True"/>
-        <ResourceFilename Value="splash.lrs"/>
-        <TopLine Value="1"/>
-        <UnitName Value="splash"/>
-        <UsageCount Value="20"/>
-      </Unit4>
-      <Unit5>
-        <CursorPos X="14" Y="8"/>
-        <Filename Value="C:/Programas/lazarus_stable/fpcsrc/rtl/win32/windows.pp"/>
-        <TopLine Value="1"/>
-        <UnitName Value="windows"/>
-        <UsageCount Value="10"/>
-      </Unit5>
-      <Unit6>
-        <CursorPos X="8" Y="1"/>
-        <Filename Value="etpackage.pas"/>
-        <TopLine Value="1"/>
-        <UnitName Value="etpackage"/>
-        <UsageCount Value="10"/>
-      </Unit6>
-      <Unit7>
-        <CursorPos X="3" Y="21"/>
-        <Filename Value="home/felipe/Programação/OsciloscopioISA/principal.pas"/>
-        <ComponentName Value="frmPrincipal"/>
-        <HasResources Value="True"/>
-        <ResourceFilename Value="home/felipe/Programação/OsciloscopioISA/principal.lrs"/>
-        <TopLine Value="5"/>
-        <UnitName Value="principal"/>
-        <UsageCount Value="10"/>
-      </Unit7>
-      <Unit8>
-        <CursorPos X="12" Y="1495"/>
-        <Filename Value="usr/share/fpcsrc/rtl/unix/linuxold.inc"/>
-        <TopLine Value="1478"/>
-        <UsageCount Value="10"/>
-      </Unit8>
-    </Units>
+    <BuildModes Count="1">
+      <Item1 Name="default" Default="True"/>
+    </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
       <IgnoreBinaries Value="False"/>
@@ -117,16 +32,57 @@
         <MinVersion Major="1" Valid="True"/>
       </Item1>
     </RequiredPackages>
-    <JumpHistory Count="0" HistoryIndex="-1"/>
+    <Units Count="5">
+      <Unit0>
+        <Filename Value="etdemo.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="project1"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="main"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="EpikTimer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="EpikTimer"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="newsw.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form2"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="newsw"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="splash.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form3"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="splash"/>
+      </Unit4>
+    </Units>
   </ProjectOptions>
   <CompilerOptions>
-    <Version Value="5"/>
+    <Version Value="11"/>
+    <Target>
+      <Filename Value="etdemo"/>
+    </Target>
     <SearchPaths>
-      <SrcPath Value="$(LazarusDir)/lcl/;$(LazarusDir)/lcl/interfaces/$(LCLWidgetType)/"/>
+      <UnitOutputDirectory Value="units"/>
+      <SrcPath Value="$(LazarusDir)/lcl;$(LazarusDir)/lcl/interfaces/$(LCLWidgetType)"/>
     </SearchPaths>
-    <CodeGeneration>
-      <Generate Value="Faster"/>
-    </CodeGeneration>
+    <Parsing>
+      <SyntaxOptions>
+        <UseAnsiStrings Value="False"/>
+      </SyntaxOptions>
+    </Parsing>
     <Other>
       <CompilerPath Value="$(CompPath)"/>
     </Other>

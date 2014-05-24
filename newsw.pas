@@ -5,7 +5,7 @@ unit newsw;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   Grids, Buttons,EpikTimer;
 
 type
@@ -50,6 +50,8 @@ Var
 Form2:Tform2;
 
 implementation
+
+{$R *.lfm}
 
 { TForm2 }
 
@@ -127,9 +129,6 @@ begin
   ET.Free
 end;
 
-
-initialization
-  {$I newsw.lrs}
 
 end.
 

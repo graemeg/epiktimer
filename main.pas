@@ -23,31 +23,12 @@ unit main;
   Place - Suite 330, Boston, MA 02111-1307, USA.
 }
 
-{
- Contributors
-   Felipe Monteiro de Carvalho (felipemonteiro.carvalho@gmail.com)
-
- Known Issues
-
-   - Quickly written and completely undocumented... but there's nothing
-     complicated going on in this unit.
-
- Change log
-
-  Initially written on 28-06-2003 TL
-  Pre-release 30-06-2003 TL - Needs testing on systems without CPUID and TSC hardware
-
-  15-11-2005
-    Removed Linux unit to compile on Windows. It happens that main.pas didn´t
-   use this unit.
-}
-
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs,
   Buttons, StdCtrls, ExtCtrls, EpikTimer, ComCtrls, Grids, newsw;
 
 Const
@@ -145,6 +126,7 @@ var
 
 implementation
 
+{$R *.lfm}
 
 { TForm1 }
 
@@ -166,7 +148,7 @@ procedure TForm1.Button18CLICK(Sender: TObject);
 begin
   Showmessage('EpikTimer component demo program'+#10#10+
   'By Tom Lisjac <vlx@users.sourceforge.net>'+#10+
-  'Additional information about this program can be found at http://theseus.sourceforge.net/fpclaz'+#10+
+  'Additional information about this program can be found at http://wiki.freepascal.org/EpikTimer'+#10+
   'or by contacting the author.');
 end;
 
@@ -283,8 +265,6 @@ begin
   Iter:=0;
 end;
 
-initialization
-{$i main.lrs}
 
 end.
 

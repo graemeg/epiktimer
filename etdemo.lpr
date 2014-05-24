@@ -6,8 +6,10 @@ uses
   Interfaces,
   Forms, main, EpikTimer, newsw, splash;
 
-var i:Integer;
+var
+  i:Integer;
 begin
+  RequireDerivedFormResource := True;
   Application.Initialize;
   Form3 := TForm3.Create(nil);
   Try
