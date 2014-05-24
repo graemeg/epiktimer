@@ -1,14 +1,20 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="3">
+  <Package Version="4">
     <Name Value="etpackage_dsgn"/>
-    <Author Value="Tom Lisjac <netdxr@gmail.com>"/>
+    <AddToProjectUsesSection Value="True"/>
+    <Author Value="Tom Lisjac &lt;netdxr@gmail.com>"/>
     <CompilerOptions>
-      <Version Value="8"/>
+      <Version Value="11"/>
       <SearchPaths>
-        <OtherUnitFiles Value="$(LazarusDir)/lcl/units/"/>
-        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/"/>
+        <OtherUnitFiles Value="$(LazarusDir)/lcl/units"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
       <Other>
         <CompilerPath Value="$(CompPath)"/>
       </Other>
@@ -18,7 +24,7 @@
 "/>
     <License Value="Modified LGPL
 "/>
-    <Version Major="1"/>
+    <Version Major="1" Release="1"/>
     <Files Count="2">
       <Item1>
         <Filename Value="epiktimer.lrs"/>
@@ -35,14 +41,14 @@
     <RequiredPkgs Count="2">
       <Item1>
         <PackageName Value="etpackage"/>
-        <MinVersion Major="1" Build="1" Valid="True"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item1>
       <Item2>
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPkgs>
     <UsageOptions>
-      <UnitPath Value="$(PkgOutDir)/"/>
+      <UnitPath Value="$(PkgOutDir)"/>
     </UsageOptions>
     <PublishOptions>
       <Version Value="2"/>
