@@ -426,7 +426,7 @@ begin
 {$ENDIF WINDOWS}
 end;
 
-function TEpikTimer.SystemSleep(Milliseconds: Integer):Integer;
+function TEpikTimer.SystemSleep(Milliseconds: Integer): integer;
 begin
   Sleep(Milliseconds);
   Result := 0;
@@ -546,12 +546,12 @@ begin
   If FWantMS then Result:=Result+SM;
 end;
 
-function TEpikTimer.ElapsedStr(var T: TimerData): string;
+function TEpikTimer.ElapsedStr(var T: TimerData): String;
 begin
   Result := format('%.'+inttostr(FSPrecision)+'f',[Elapsed(T)]);
 end;
 
-function TEpikTimer.WallClockTime: string;
+function TEpikTimer.WallClockTime: String;
 var
   Y, D, M, hour, min, sec, ms, us: Word;
 {$IFNDEF Windows}
@@ -593,7 +593,7 @@ function  TEpikTimer.ElapsedDHMS: String; begin Result:=ElapsedDHMS(BuiltInTimer
 // timebase source. These have to be unique as the output of this measurement
 // is measured in "ticks"... which are different periods for each timebase.
 
-function TEpikTimer.CalibrateCallOverheads(Var Timebase:TimebaseData):Integer;
+function TEpikTimer.CalibrateCallOverheads(var TimeBase: TimebaseData): Integer;
 var i:Integer; St,Fin,Total:TickType;
 begin
   with Timebase, Timebase.CalibrationParms do
@@ -628,7 +628,7 @@ end;
 // time reference which, in this case, is nanosleep. There is a *lot* of jitter
 // in a nanosleep call so an attempt is made to compensate for some of it here.
 
-function TEpikTimer.CalibrateTickFrequency(Var Timebase:TimebaseData):Integer;
+function TEpikTimer.CalibrateTickFrequency(var TimeBase: TimebaseData): Integer;
 var
   i: Integer;
   Total, SS, SE: TickType;
@@ -680,7 +680,7 @@ end;
   microsecond system clock accumulates enough ticks to perform a *very*
   accurate frequency measurement of the typically picosecond time stamp counter. }
 
-Function TEpikTimer.GetTimebaseCorrelation:TickType;
+function TEpikTimer.GetTimebaseCorrelation: TickType;
 Var
   HWDiff, SysDiff, Corrected: Extended;
 begin
