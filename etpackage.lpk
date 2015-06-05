@@ -2,7 +2,6 @@
 <CONFIG>
   <Package Version="4">
     <Name Value="etpackage"/>
-    <AddToProjectUsesSection Value="True"/>
     <Author Value="Tom Lisjac &lt;netdxr@gmail.com>"/>
     <CompilerOptions>
       <Version Value="11"/>
@@ -14,9 +13,6 @@
           <UseAnsiStrings Value="False"/>
         </SyntaxOptions>
       </Parsing>
-      <Other>
-        <CompilerPath Value="$(CompPath)"/>
-      </Other>
     </CompilerOptions>
     <Description Value="EpikTimer elapsed time component
 http://wiki.lazarus.freepascal.org/EpikTimer
