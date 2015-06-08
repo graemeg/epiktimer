@@ -70,6 +70,12 @@ uses
   Windows, MMSystem,
 {$ELSE}
   unix, unixutil, baseunix,
+  {$IFDEF LINUX}
+  Linux,  // for clock_gettime() access
+  {$ENDIF}
+  {$IFDEF FreeBSD}
+  FreeBSD,  // for clock_gettime() access
+  {$ENDIF}
 {$ENDIF}
   Classes, SysUtils, dateutils;
 
@@ -388,31 +394,29 @@ function SystemTicks: TickType;
 begin
   QueryPerformanceCounter(Result);
 {$ELSE}
-  {$IFDEF LINUX}
-  const
-    CLOCK_MONOTONIC = 1;
-
-          { Experimental, no idea if this works or is implemented correctly }
-          function newGetTickCount: Cardinal;
-          var
-            ts: TTimeSpec;
-            i: TickType;
-            t: timeval;
-          begin
-            // use the Posix clock_gettime() call
-            if clock_gettime(CLOCK_MONOTONIC, @ts)=0 then
-            begin
-              // Use the FPC fallback
-              fpgettimeofday(@t,nil);
-              // Build a 64 bit microsecond tick from the seconds and microsecond longints
-              Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
-              Exit;
-            end;
-            i := ts.tv_sec;
-            i := (i*MilliPerSec) + ts.tv_nsec div NanoPerMilli;
-            Result := i;
-          end;
+  {$IF defined(LINUX)} {or defined(FreeBSD)}  // FreeBSD disabled - waiting for FPC to catch up
+  { Experimental }
+  function newGetTickCount: Cardinal;
+  var
+    ts: TTimeSpec;
+    i: TickType;
+    t: timeval;
   begin
+    // use the Posix clock_gettime() call
+    if clock_gettime(CLOCK_MONOTONIC, @ts)=0 then
+    begin
+      // Use the FPC fallback
+      fpgettimeofday(@t,nil);
+      // Build a 64 bit microsecond tick from the seconds and microsecond longints
+      Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
+      Exit;
+    end;
+    i := ts.tv_sec;
+    i := (i*MilliPerSec) + ts.tv_nsec div NanoPerMilli;
+    Result := i;
+  end;
+
+begin
     Result := newGetTickCount;
   {$ELSE}
   var
