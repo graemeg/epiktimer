@@ -100,7 +100,7 @@
        internal tick frequencies. Timing is non-deterministic when calling
        the Linux kernel so some averaging and smoothing of the resulting jitter
        is helpful. If EpikTimer is in this mode, long term accuracy isn't
-       guaranteed... but short term comparitive measurements can still be made.
+       guaranteed... but short term comparative measurements can still be made.
        
        Pressing "Calibrate" performs overhead extraction and gates the selected
        timebase against the best timebase gate available on a given host. The 
