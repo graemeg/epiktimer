@@ -396,7 +396,7 @@ begin
 {$ELSE}
   {$IF defined(LINUX)} {or defined(FreeBSD)}  // FreeBSD disabled - waiting for FPC to catch up
   { Experimental }
-  function newGetTickCount: Cardinal;
+  function newGetTickCount: Int64;
   var
     ts: TTimeSpec;
     i: TickType;
