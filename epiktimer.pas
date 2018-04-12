@@ -16,7 +16,7 @@ unit EpikTimer;
     System sleep function
     Designed to support multiple operating systems and Architectures
     Designed to support other hardware tick sources
-            
+
   Credits: Thanks to Martin Waldenburg for a lot of great ideas for using
            the Pentium's RDTSC instruction in wmFastTime and QwmFastTime.
 }
@@ -32,13 +32,13 @@ unit EpikTimer;
   This program is distributed in the hope that it will be useful, but WITHOUT
   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE.
-  
+
   Contributor(s):
-  
+
   * Felipe Monteiro de Carvalho (felipemonteiro.carvalho@gmail.com)
   * Marcel Minderhoud
   * Graeme Geldenhuys <graemeg@gmail.com>
-  
+
 }
 {
  Known Issues
@@ -88,24 +88,24 @@ Const
 type
 
   TickType = Int64; // Global declaration for all tick processing routines
-  
+
   FormatPrecision = 1..12; // Number of decimal places in elapsed text format
-  
+
   // Component powers up in System mode to provide some cross-platform safety.
   TickSources = (SystemTimebase, HardwareTimebase); // add others if desired
 
   (* * * * * * * * * * * Timebase declarations  * * * * * * * * * * *)
-  
+
   { There are two timebases currently implemented in this component but others
     can be added by declaring them as "TickSources", adding a TimebaseData
     variable to the Private area of TEpikTimer and providing a "Ticks" routine
     that returns the current counter value.
-    
+
     Timebases are "calibrated" during initialization by taking samples of the
     execution times of the SystemSleep and Ticks functions measured with in the
     tick period of the selected timebase. At runtime, these values are retrieved
     and used to remove the call overhead to the best degree possible.
-    
+
     System latency is always present and contributes "jitter" to the edges of
     the sample measurements. This is especially true if a microsecond system
     clock isn't detected on the host system and a fallback gated measurement
@@ -113,13 +113,13 @@ type
     timebase frequency. This is sufficient for short term measurements where
     high resolution comparisons are desired... but over a long measurement
     period, the hardware and system wall clock will diverge significantly.
-    
+
     If a microsecond system clock is found, timebase correlation is used to
     synchronize the hardware counter and system clock. This is described below.
   }
 
   TickCallFunc = function: Ticktype; // Ticks interface function
-  
+
   // Contains timebase overhead compensation factors in ticks for each timebase
   TimebaseCalibrationParameters = record
     FreqCalibrated: Boolean; // Indicates that the tickfrequency has been calibrated
@@ -138,9 +138,9 @@ type
     SleepOverhead: Ticktype;   // SystemSleep all overhead in TicksFrequency for this timebase
     Ticks: TickCallFunc; // all methods get their ticks from this function when selected
   end;
-  
+
   TimeBaseSelector = ^TimebaseData;
-  
+
   (*  * * * * * * * * * * Timebase Correlation  * * * * * * * * * * *)
 
   { The TimeBaseCorrelation record stores snapshot samples of both the system
@@ -171,15 +171,15 @@ type
   // minutes of operation, there won't be very much correcting to do!
 
   CorrelationModes=(Manual, OnTimebaseSelect, OnGetElapsed);
-  
+
   (* * * * * * * * * * * Timer Data record structure  * * * * * * * * * * *)
-  
+
   // This is the timer data context. There is an internal declaration of this
   // record and overloaded methods if you only want to use the component for a
   // single timer... or you can declare multiple TimerData records in your
   // program and create as many instances as you want with only a single
   // component on the form. See the "Stopwatch" methods in the TEpikTimer class.
-  
+
   // Each timers points to the timebase that started it... so you can mix system
   // and hardware timers in the same application.
 
@@ -189,7 +189,7 @@ type
     StartTime:TickType; // Ticks sample when timer was started
     TotalTicks:TickType; // Total ticks... for snapshotting and pausing
   end;
-  
+
   TEpikTimer= class(TComponent)
     private
       BuiltInTimer:TimerData; // Used to provide a single built-in timer;
@@ -198,13 +198,13 @@ type
       FHWTicks:TimeBaseData;     // The hardware timebase
       FSystemTicks:TimeBaseData; // The system timebase
       FSelectedTimebase:TimeBaseSelector; // Pointer to selected database
-      
+
       FTimeBaseSource: TickSources; // use hardware or system timebase
       FWantDays: Boolean; // true if days are to be displayed in string returns
       FWantMS: Boolean; // True to display milliseconds in string formatted calls
       FSPrecision: FormatPrecision; // number of digits to display in string calls
       FMicrosecondSystemClockAvailable:Boolean; // true if system has microsecond clock
-      
+
       StartupCorrelationSample:TimebaseCorrelationData; // Starting ticks correlation snapshot
       UpdatedCorrelationSample:TimebaseCorrelationData; // Snapshot of last correlation sample
       FCorrelationMode: CorrelationModes; // mode to control when correlation updates are performed
@@ -290,13 +290,13 @@ implementation
   source which, in this case, is the Pentium's internal 64 Time Stamp Counter.
   The second source (the default) uses the given environment's most precision
   "timeofday" system call so it can work across OS platforms and architectures.
-  
+
   The hardware timer's accuracy depends on the frequency of the timebase tick
   source that drives it... in other words, how many of the timebase's ticks
   there are in a second. This frequency is measured by capturing a sample of the
   timebase ticks for a known period against a source of known accuracy. There
   are two ways to do this.
-  
+
   The first is to capture a large sample of ticks from both the unknown and
   known timing sources. Then the frequency of the unknown tick stream can be
   calculated by: UnknownSampleTicks / (KnownSampleTicks / KnownTickFrequency).
@@ -314,9 +314,10 @@ implementation
 }
 
 const
-  NanoPerSec = 1000000000;
-  NanoPerMilli = 1000000;
+  NanoPerSec = 1000000000; // 1 billionth of a second
+  NanoPerMilli = 1000000;  // 1 millionth of a millisecond
   MilliPerSec = 1000;
+  USecPerSec = 1000000;  // Microsecond. 1 millionth of a second
 
 
 (* * * * * * * * Start of i386 Hardware specific code  * * * * * * *)
@@ -394,40 +395,30 @@ function SystemTicks: TickType;
 begin
   QueryPerformanceCounter(Result);
 {$ELSE}
-  {$IF defined(LINUX)} {or defined(FreeBSD)}  // FreeBSD disabled - waiting for FPC to catch up
-  { Experimental }
-  function newGetTickCount: Cardinal;
+  {$IF defined(LINUX) or defined(FreeBSD)}
+  // This is essentially the same as FPC 3.0.4's GetTickCount64() call
+  function _GetTickCount: QWord;
   var
     ts: TTimeSpec;
-    i: TickType;
     t: timeval;
   begin
     // use the Posix clock_gettime() call
     if clock_gettime(CLOCK_MONOTONIC, @ts)=0 then
     begin
-      // Use the FPC fallback
-      fpgettimeofday(@t,nil);
-      // Build a 64 bit microsecond tick from the seconds and microsecond longints
-      Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
+      Result := (TickType(ts.tv_sec) * MilliPerSec) + (ts.tv_nsec div NanoPerMilli);
       Exit;
     end;
-    i := ts.tv_sec;
-    i := (i*MilliPerSec) + ts.tv_nsec div NanoPerMilli;
-    Result := i;
+    // Use the FPC fallback
+    fpgettimeofday(@t,nil);
+    Result := (TickType(t.tv_sec) * MilliPerSec) +  (t.tv_usec div 1000 { microsecond to millisecond });
   end;
 
 begin
-    Result := newGetTickCount;
+    Result := _GetTickCount;
   {$ELSE}
-  var
-    t: timeval;
-  begin
-    // Use the FPC fallback
-    fpgettimeofday(@t,nil);
-    // Build a 64 bit microsecond tick from the seconds and microsecond longints
-    Result := (TickType(t.tv_sec) * NanoPerMilli) + t.tv_usec;
-  {$ENDIF LINUX}
-{$ENDIF WINDOWS}
+    Result := GetTickCount64;
+  {$ENDIF}
+{$ENDIF}
 end;
 
 function TEpikTimer.SystemSleep(Milliseconds: Integer): integer;
@@ -751,7 +742,7 @@ constructor TEpikTimer.Create(AOwner: TComponent);
             FHWTickSupportAvailable:=CalibrateCallOverheads(FHWTicks)=0
           End
       end;
-         
+
     CalibrateCallOverheads(FSystemTicks);
     CalibrateTickFrequency(FSystemTicks);
 
